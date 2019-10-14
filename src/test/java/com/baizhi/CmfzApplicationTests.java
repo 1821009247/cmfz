@@ -87,9 +87,6 @@ public class CmfzApplicationTests {
         article.setAuthor("作者");
         article.setStatus("y");
         articleMapper.update(article);
-        System.out.println("xiaohei");
-        System.out.println("xiaobai");
-        System.out.println("xiao");
     }
 
 }
