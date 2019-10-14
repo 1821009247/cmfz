@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.mapper.ChapterMapper">
+    <select id="findAll" resultType="Chapter">
+        select * from chapter where album_id=#{album_id} LIMIT #{start},#{rows}
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+      select count(id) from chapter
+    </select>
+    <insert id="save" parameterType="Chapter">
+        insert  into  chapter values (#{id},#{filepath},#{title},#{size},#{longs},#{publish_date},#{album_id})
+    </insert>
+    <select id="findOne" parameterType="Chapter">
+        select * from chapter where id=#{id}
+    </select>
+    <update id="updateFilepath" parameterType="Chapter">
+        update chapter set `size`=#{size},longs=#{longs} where id=#{id}
+    </update>
+    <delete id="delete" parameterType="Chapter">
+        delete from chapter where id=#{id}
+    </delete>
+    <update id="updatef" parameterType="Chapter">
+        update chapter set filepath=#{filepath} where id=#{id}
+    </update>
+    <select id="count1" resultType="java.lang.Integer">
+          select count(id) from chapter where album_id=#{album_id}
+    </select>
+</mapper>

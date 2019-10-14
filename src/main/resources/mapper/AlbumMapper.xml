@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.mapper.AlbumMapper">
+    <resultMap id="AlbumResultMap" type="Album">
+        <id property="id" column="aid"></id>
+        <result property="title" column="atitle"></result>
+        <result property="cover" column="acover"></result>
+        <result property="score" column="ascore"></result>
+        <result property="author" column="aauthor"></result>
+        <result property="beam" column="abeam"></result>
+        <result property="count" column="acount"></result>
+        <result property="create_date" column="acreate_date"></result>
+        <result property="publish_date" column="apublish_date"></result>
+        <result property="status" column="astatus"></result>
+        <association property="chapters" javaType="chapter">
+            <id property="id" column="id"></id>
+            <result property="filepath" column="cfilepath"></result>
+            <result property="title" column="ctitle"></result>
+            <result property="size" column="csize"></result>
+            <result property="longs" column="clongs"></result>
+            <result property="publish_date" column="cpublish_date"></result>
+        </association>
+    </resultMap>
+    <select id="findAllChapter" resultMap="AlbumResultMap">
+        SELECT  a.id aid,a.title atitle,a.cover acover,a.score ascore,a.author aauthor,a.beam abeam,a.count acount,a.create_date acreate_date,a.publish_date apublish_date,a.content acontent,a.`status` astatus,
+					c.filepath cfilepath,c.title ctitle,c.size csize,c.longs clongs,c.publish_date cpublish_date
+					from album  a LEFT JOIN chapter c
+						on a.id=c.album_id
+								LIMIT #{start},#{rows}
+    </select>
+    <select id="findAll" resultType="Album">
+        select * from album LIMIT #{start},#{rows}
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+      select count(id) from album
+    </select>
+    <insert id="save" parameterType="Album">
+      INSERT INTO album VALUES(#{id},#{title},#{cover},#{score},#{author},#{beam},#{count},#{create_date},#{publish_date},#{content},#{status})
+    </insert>
+    <select id="findOne" resultType="Album">
+        select * from album where id=#{id}
+    </select>
+    <update id="updateImg" parameterType="Album">
+        update album set cover=#{cover} where id=#{id}
+    </update>
+    <delete id="delete" parameterType="Album">
+        delete from album where id=#{id}
+    </delete>
+    <update id="update" parameterType="Album">
+        update album set score=#{score},beam=#{beam},`count`=#{count},status=#{status}
+    </update>
+    <update id="updateCount" parameterType="Album">
+        update album set count=#{count} where id=#{id}
+    </update>
+</mapper>
