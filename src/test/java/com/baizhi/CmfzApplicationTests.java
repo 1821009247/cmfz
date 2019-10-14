@@ -89,6 +89,7 @@ public class CmfzApplicationTests {
         articleMapper.update(article);
         System.out.println("xiaohei");
         System.out.println("xiaobai");
+        System.out.println("xiao");
     }
 
 }
