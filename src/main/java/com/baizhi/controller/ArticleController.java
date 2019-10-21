@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -34,5 +35,12 @@ public class ArticleController {
     public void update(Article article) {
 
         articleService.update(article);
+    }
+
+    @RequestMapping("es")
+    public List<Article> queryByes(String esvalue) {
+
+        List<Article> articles = articleService.queryByes(esvalue);
+        return articles;
     }
 }

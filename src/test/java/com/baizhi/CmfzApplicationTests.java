@@ -3,12 +3,22 @@ package com.baizhi;
 import com.baizhi.entity.*;
 import com.baizhi.mapper.*;
 import com.baizhi.service.AdminService;
+import com.baizhi.service.ArticleService;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Date;
 import java.util.List;
 
@@ -86,7 +96,39 @@ public class CmfzApplicationTests {
         article.setContent("内容");
         article.setAuthor("作者");
         article.setStatus("y");
-        articleMapper.update(article);
+        Date createDate = article.getCreateDate();
+        System.out.println(createDate);
+        /* articleMapper.update(article);*/
     }
 
+    @Test
+    public void name1() throws IOException {
+        TransportAddress transportAddress = new TransportAddress(InetAddress.getByName("192.168.118.33"), 9300);
+        TransportClient transportClient = new PreBuiltTransportClient(Settings.EMPTY).addTransportAddress(transportAddress);
+        List<Article> all = articleMapper.findAll();
+        for (Article article : all) {
+            XContentBuilder xContentBuilder = XContentFactory.jsonBuilder().startObject()
+                    .field("title", article.getTitle())
+                    .field("author", article.getAuthor())
+                    .field("content", article.getContent())
+                    .field("status", article.getStatus())
+                    .field("id", article.getId())
+                    .endObject();
+            IndexResponse indexResponse = transportClient.prepareIndex("cmfz", "article").setSource(xContentBuilder).get();
+            System.out.println(indexResponse.status());
+        }
+
+    }
+
+    @Autowired
+    ArticleService articleService;
+
+    @Test
+    public void name2() {
+        List<Article> articles = articleService.queryByes("国");
+        for (Article article : articles) {
+            System.out.println(article);
+
+        }
+    }
 }
